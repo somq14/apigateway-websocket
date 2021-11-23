@@ -1,0 +1,25 @@
+{
+  "name": "deployment",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assertions": "1.133.0",
+    "@types/node": "10.17.27",
+    "aws-cdk": "1.133.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigatewayv2": "^1.133.0",
+    "@aws-cdk/aws-cloudfront": "^1.133.0",
+    "@aws-cdk/aws-cloudfront-origins": "^1.133.0",
+    "@aws-cdk/aws-iam": "^1.133.0",
+    "@aws-cdk/aws-lambda": "^1.133.0",
+    "@aws-cdk/core": "1.133.0",
+    "source-map-support": "^0.5.16"
+  }
+}
