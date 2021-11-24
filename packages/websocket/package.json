@@ -2,5 +2,16 @@
   "name": "websocket",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "package": "zx scripts/package.mjs"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.2",
+    "zx": "^4.2.0"
+  },
+  "dependencies": {}
 }

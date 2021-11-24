@@ -58,29 +58,15 @@ export class DeploymentStack extends cdk.Stack {
       "DefaultRouteFunction",
       {
         runtime: lambda.Runtime.NODEJS_14_X,
-        code: lambda.Code.fromInline(`
-exports.handler = async (event) => {
-  console.info(event);
-  return {
-    statusCode: 200,
-  };
-};
-      `),
-        handler: "index.handler",
+        code: lambda.Code.fromAsset("../../package.zip"),
+        handler: "default-handler.handler",
       }
     );
 
     const connectRouteHandler = new lambda.Function(this, "ConnectFunction", {
       runtime: lambda.Runtime.NODEJS_14_X,
-      code: lambda.Code.fromInline(`
-exports.handler = async (event) => {
-  console.info(event);
-  return {
-    statusCode: 200,
-  };
-};
-      `),
-      handler: "index.handler",
+      code: lambda.Code.fromAsset("../../package.zip"),
+      handler: "connect-handler.handler",
     });
 
     const disconnectRouteHandler = new lambda.Function(
@@ -88,15 +74,8 @@ exports.handler = async (event) => {
       "DisconnectFunction",
       {
         runtime: lambda.Runtime.NODEJS_14_X,
-        code: lambda.Code.fromInline(`
-exports.handler = async (event) => {
-  console.info(event);
-  return {
-    statusCode: 200,
-  };
-};
-      `),
-        handler: "index.handler",
+        code: lambda.Code.fromAsset("../../package.zip"),
+        handler: "disconnect-handler.handler",
       }
     );
 
@@ -135,6 +114,7 @@ exports.handler = async (event) => {
           "Sec-WebSocket-Protocol",
           "Sec-WebSocket-Extensions"
         ),
+        queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
       }
     );
 
@@ -150,21 +130,9 @@ exports.handler = async (event) => {
         functionAssociations: [
           {
             function: new cloudfront.Function(this, "Function", {
-              code: cloudfront.FunctionCode.fromInline(`
-var handler = (event) => {
-  var request = event.request;
-
-  request.uri
-    .slice(1)
-    .split("/")
-    .forEach((dir, index) => {
-      request.querystring[index.toString()] = { value: dir };
-    });
-
-  request.uri = "/";
-  return request;
-};
-`),
+              code: cloudfront.FunctionCode.fromFile({
+                filePath: "../../packages/websocket/src/cloudfront-function.js",
+              }),
             }),
             eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
           },
